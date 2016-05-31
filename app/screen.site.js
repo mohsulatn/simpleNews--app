@@ -237,6 +237,7 @@ class ScreenSite extends Component {
 
                     <View style={{flex:1}}>
                         <Text style={styles.title}>{question.title}</Text>
+                        <Text numberOfLines={1} style={styles.url}>{question.href}</Text>
                     </View>
                 </View></TouchableOpacity>
         );
@@ -257,12 +258,21 @@ class ScreenSite extends Component {
             <View>
                 <View style={styles.header}>
 
+                    <TouchableOpacity onPress={()=> this._pressButtonBack()}>
+                        <Text style={{color:'#777',marginLeft:10}}>返回</Text>
+                    </TouchableOpacity>
+
                     <Text style={{flex:1,textAlign:'center',color:'#333'}}>{this.props.feed.name}</Text>
 
+                    <TouchableOpacity onPress={()=> this._viewMore(this.state.feed)}>
+                        <Text style={{color:'#777',marginRight:10}}>更多</Text>
+                    </TouchableOpacity>
+
+
                 </View>
-                <View>
-                    <Text style={{flex:1}}>
-                        Loading articles...
+                <View style={{alignItems: 'center',height:ScreenHeight,justifyContent: 'center',}}>
+                    <Text style={{ color:"#999"}}>
+                        Loading...
                     </Text>
                 </View>
             </View>
@@ -347,7 +357,12 @@ const styles = StyleSheet.create({
     },
     title: {
         color: "#555",
-        fontSize: 14
+        fontSize: 14,
+    },
+    url:{
+        color:'#ccc',
+        fontSize:12,
+
     },
     avatar: {
         width: 32,

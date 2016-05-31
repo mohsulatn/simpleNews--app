@@ -19,20 +19,32 @@ import {
 
 import ScreenSite from './screen.site';
 
-var feeds = require('./feeds');
-
+var feeds = [];
 class ScreenFeed extends Component {
     constructor(props) {
         super(props);
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.state = {
-            dataSource: ds.cloneWithRows(feeds),
-        };
+        var ds =
+            this.state = {
+                load: false,
+                dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+            };
         this._viewFeed = this._viewFeed.bind(this)
         this.renderQuestion = this.renderQuestion.bind(this)
     }
 
     componentDidMount() {
+        fetch('https://wtser.com/config/feeds.json')
+            .then((response) => {
+                return response.json()
+            })
+            .then((responseText) => {
+                feeds = responseText
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(feeds),
+                    load: true
+                })
+            })
+
     }
 
 
@@ -47,7 +59,7 @@ class ScreenFeed extends Component {
                 name: 'SecondPageComponent',
                 component: ScreenSite,
                 params: {
-                    feed:feed
+                    feed: feed
                 }
             })
         }
@@ -75,16 +87,30 @@ class ScreenFeed extends Component {
 
     renderLoadingView() {
         return (
-            <View style={styles.container}>
-                <Text>
-                    Loading questions...
+
+        <View>
+            <View style={styles.header}>
+
+                <Text style={{flex:1,textAlign:'center',color:'#333',fontWeight:'bold'}}>阅阅</Text>
+
+            </View>
+
+            <View style={{alignItems: 'center',height:ScreenHeight,justifyContent: 'center',}}>
+                <Text style={{ color:"#999"}}>
+                    Loading...
                 </Text>
             </View>
+        </View>
+
         );
     }
 
 
     render() {
+
+        if (!this.state.load) {
+            return this.renderLoadingView()
+        }
 
 
         return (
@@ -95,16 +121,16 @@ class ScreenFeed extends Component {
 
                 </View>
 
-                    <ListView style={styles.container}
-                              dataSource={this.state.dataSource}
-                              renderRow={this.renderQuestion}
-                    />
+                <ListView style={styles.container}
+                          dataSource={this.state.dataSource}
+                          renderRow={this.renderQuestion}
+                />
             </View>
         )
     }
 }
 
-let ScreenHeight = Dimensions.get("window").height-60;
+let ScreenHeight = Dimensions.get("window").height - 60;
 const styles = StyleSheet.create({
 
     header: {
@@ -112,13 +138,13 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         paddingBottom: 10,
         flexDirection: 'row',
-        borderBottomWidth:1,
-        borderBottomColor:"#ccc",
-        height:58
+        borderBottomWidth: 1,
+        borderBottomColor: "#ccc",
+        height: 58
     }
     ,
     container: {
-        height:ScreenHeight
+        height: ScreenHeight
     },
     row: {
         borderBottomWidth: 1,
