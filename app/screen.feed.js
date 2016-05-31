@@ -19,7 +19,7 @@ import {
 
 import ScreenSite from './screen.site';
 
-var feeds = require('./data.feeds');
+var feeds = require('./feeds');
 
 class ScreenFeed extends Component {
     constructor(props) {

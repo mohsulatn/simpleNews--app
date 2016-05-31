@@ -6,9 +6,14 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "buffer": "^4.6.0",
+    "events": "^1.1.0",
     "jsdom-jscore": "git+https://github.com/frankrowe/jsdom-jscore.git",
+    "querystring": "^0.2.0",
+    "react": "15.0.2",
+    "react-native": "^0.26.2",
+    "react-native-activity-view": "^0.2.9",
     "react-native-safari-view": "^0.4.1",
-    "react": "^15.0.2",
-    "react-native": "^0.26.2"
+    "stream": "0.0.2"
   }
 }
