@@ -38,6 +38,8 @@ class ScreenSite extends Component {
     componentDidMount() {
         //这里获取从FirstPageComponent传递过来的参数: feed
         var feed = this.state.feed = this.props.feed;
+        feed.originUrl = feed.originUrl || feed.url;
+        feed.url = feed.originUrl;
         this.fetchData(feed);
     }
 
@@ -172,6 +174,9 @@ class ScreenSite extends Component {
                                 nextPage = nextPage.attributes.href._nodeValue
                                 nextPage = _this._parseNextPage(feed, nextPage)
                                 _this.state.feed.nextUrl = nextPage
+                                if (feed.url == nextPage) {
+                                    return;
+                                }
                             }
 
                             if (feed.type == 'ajax') {
@@ -239,7 +244,7 @@ class ScreenSite extends Component {
     }
 
     renderQuestionNext() {
-        if (this.state.feed.hasOwnProperty('nextUrl')) {
+        if (this.state.feed.hasOwnProperty('nextUrl') && this.state.feed.url != this.state.feed.nextUrl) {
             this.state.feed.url = this.state.feed.nextUrl
             this.fetchData(this.state.feed)
         }
@@ -292,7 +297,8 @@ class ScreenSite extends Component {
                         <Text style={{color:'#777',marginLeft:10}}>返回</Text>
                     </TouchableOpacity>
 
-                    <Text style={{flex:1,textAlign:'center',color:'#333',fontWeight:'bold'}}>{this.state.feed.name}</Text>
+                    <Text
+                        style={{flex:1,textAlign:'center',color:'#333',fontWeight:'bold'}}>{this.state.feed.name}</Text>
                     <TouchableOpacity onPress={()=> this._viewMore(this.state.feed)}>
                         <Text style={{color:'#777',marginRight:10}}>更多</Text>
                     </TouchableOpacity>
